@@ -1,0 +1,176 @@
+<div class="auth-container flex flex-col md:flex-row min-h-screen w-full">
+
+    <div class="auth-sidebar w-full md:flex-1">
+        <app-fixed-side></app-fixed-side>
+    </div>
+
+    <div class="auth-content flex-1 flex flex-col justify-center items-center bg-white px-6 py-12 md:py-0">
+
+        <div class="w-full max-w-[452px] flex flex-col gap-2.5">
+
+            @if (currentStep > 1) {
+            <div class="flex items-center justify-between w-full relative px-2 mb-4">
+
+                <div
+                    class="absolute top-1/2 left-0 right-0 h-[2px] border-t-2 border-dashed border-blue-400 -translate-y-1/2 z-0">
+                </div>
+
+                <div class="absolute top-1/2 left-0 h-[2px] bg-[var(--main-blue)] -translate-y-1/2 z-0 transition-all duration-500 ease-in-out"
+                    [style.width.%]="currentStep === 2 ? 33 : currentStep === 3 ? 66 : currentStep >= 4 ? 90 : 0">
+                </div>
+
+                <div class="z-10 flex items-center justify-center bg-white px-2">
+                    <div class="w-2.5 h-2.5 rotate-45 bg-[var(--main-blue)] border-2 border-[var(--main-blue)]"></div>
+                </div>
+
+                <div class="z-10 flex items-center justify-center bg-white px-2">
+                    <div class="w-2.5 h-2.5 rotate-45 transition-all duration-300 border-2 flex items-center justify-center"
+                        [class.bg-[var(--main-blue)]]="currentStep >= 2"
+                        [class.border-[var(--main-blue)]]="currentStep >= 2" [class.bg-white]="currentStep < 2"
+                        [class.border-blue-400]="currentStep < 2" [class.ring-[6px]]="currentStep === 2"
+                        [class.ring-blue-100]="currentStep === 2">
+                    </div>
+                </div>
+
+                <div class="z-10 flex items-center justify-center bg-white px-2">
+                    <div class="w-2.5 h-2.5 rotate-45 transition-all duration-300 border-2 flex items-center justify-center"
+                        [class.bg-[var(--main-blue)]]="currentStep >= 3"
+                        [class.border-[var(--main-blue)]]="currentStep >= 3" [class.bg-white]="currentStep < 3"
+                        [class.border-blue-400]="currentStep < 3" [class.ring-[6px]]="currentStep === 3"
+                        [class.ring-blue-100]="currentStep === 3">
+                    </div>
+                </div>
+
+                <div class="z-10 flex items-center justify-center bg-white px-2">
+                    <div class="w-2.5 h-2.5 rotate-45 transition-all duration-300 border-2 flex items-center justify-center"
+                        [class.bg-[var(--main-blue)]]="currentStep >= 4"
+                        [class.border-[var(--main-blue)]]="currentStep >= 4" [class.bg-white]="currentStep < 4"
+                        [class.border-blue-400]="currentStep < 4" [class.ring-[6px]]="currentStep === 4"
+                        [class.ring-blue-100]="currentStep === 4">
+                    </div>
+                </div>
+
+            </div>
+            }
+
+            @switch (currentStep) {
+
+            @case (1) {
+            <div class="flex flex-col animate-fade-in">
+                <h1 class="Black-Text mb-2">Create Account</h1>
+
+                <div class="pb-3">
+                    <app-email label="Email" placeholder="user@example.com" [value]="email" [hasError]="emailError"
+                        (valueChange)="email = $event" (blurred)="onEmailBlur()">
+                    </app-email>
+                </div>
+
+                <div class="py-6">
+                    <app-secondary-button text="Next" type="button" (onClick)="goToStep(2)">
+                    </app-secondary-button>
+                </div>
+
+                <p class="text-center font-Geist-Mono text-gray-500 text-[14px] mt-3 font-medium">
+                    Already have an account?
+                    <a routerLink="/login"
+                        class="text-[var(--main-blue)] cursor-pointer font-medium hover:underline">Login</a>
+                </p>
+            </div>
+            }
+
+            @case (2) {
+            <div class="flex flex-col animate-fade-in">
+                <div class="flex flex-col mb-4">
+                    <h1 class="Black-Text mb-4">Create Account</h1>
+                    <h2 class="text-[24px] font-bold text-[var(--main-blue)] mb-2.5 font-inter">Verify OTP</h2>
+                    <p class="text-[16px] font-normal text-gray-500 leading-relaxed font-Geist-Mono">
+                        Please enter the 6-digits code we have sent to:<br>
+                        <span class="text-gray-800">user@example.com.</span>
+                        <a (click)="goToStep(1)"
+                            class="text-[var(--main-blue)] font-medium underline ps-2.5 cursor-pointer">Edit</a>
+                    </p>
+                </div>
+
+                <div class="mt-2.5 mb-6 w-full md:w-2/4">
+                    <app-otp [length]="6" (onCodeCompleted)="onOtpChange($event)">
+                    </app-otp>
+                </div>
+
+                <p class="font-Geist-Mono text-center text-[14px] text-gray-500 mb-2.5">
+                    You can request another code in:
+                    <span class="ms-1">60</span>
+                </p>
+
+                <div class="mt-10">
+                    <app-secondary-button text="Verify Code" type="button" (onClick)="onVerifySubmit()">
+                    </app-secondary-button>
+                </div>
+            </div>
+            }
+
+            @case (3) {
+            <div class="flex flex-col animate-fade-in">
+                <div class="flex flex-col mb-4">
+                    <h1 class="Black-Text">Create Account</h1>
+                    <p class="text-[24px] font-bold text-[var(--main-blue)] my-4 font-inter">Tell us more about you</p>
+                </div>
+
+                <form class="flex flex-col gap-4">
+                    <div class="flex flex-col md:flex-row gap-2.5">
+                        <app-user-name label="First name" placeholder="Ahmed" [value]="firstName" [required]="true"
+                            [hasError]="firstNameError" (valueChange)="firstName = $event"
+                            (blurred)="onFirstNameBlur()">
+                        </app-user-name>
+
+                        <app-user-name label="Last name" placeholder="Abdullah" [value]="lastName" [required]="true"
+                            [hasError]="lastNameError" (valueChange)="lastName = $event" (blurred)="onLastNameBlur()">
+                        </app-user-name>
+                    </div>
+
+                    <app-user-name label="User name" placeholder="User123" [value]="username" [required]="true"
+                        [hasError]="usernameError" (valueChange)="username = $event" (blurred)="onUsernameBlur()">
+                    </app-user-name>
+
+                    <app-phone label="Phone" placeholder="1012345678" [value]="phoneNumber" [hasError]="phoneError"
+                        (valueChange)="phoneNumber = $event" (blurred)="onPhoneBlur()">
+                    </app-phone>
+
+                    <div class="mt-6">
+                        <app-secondary-button text="Next" type="button" (onClick)="goToStep(4)">
+                        </app-secondary-button>
+                    </div>
+                </form>
+            </div>
+            }
+
+            @case (4) {
+            <div class="flex flex-col animate-fade-in">
+                <div class="flex flex-col mb-4">
+                    <h1 class="Black-Text">Create Account</h1>
+                    <p class="text-[24px] font-bold text-[var(--main-blue)] my-4 font-inter">Create a strong password
+                    </p>
+                </div>
+
+                <form class="flex flex-col gap-4" (submit)="onSubmit($event)">
+                    <app-password label="Password" placeholder="******" [value]="password" [hasError]="passwordError"
+                        [errorMessage]="passwordErrorMessage" (valueChange)="password = $event"
+                        (blurred)="onPasswordBlur()" [required]="true">
+                    </app-password>
+
+                    <app-password label="Confirm Password" placeholder="*****" [value]="confirmPassword"
+                        [hasError]="confirmPasswordError" [errorMessage]="confirmPasswordErrorMessage"
+                        (valueChange)="confirmPassword = $event" (blurred)="onConfirmPasswordBlur()" [required]="true">
+                    </app-password>
+
+                    <div class="mt-6">
+                        <app-primary-button text="Create Account" type="submit">
+                        </app-primary-button>
+                    </div>
+                </form>
+            </div>
+            }
+            }
+
+        </div>
+    </div>
+</div>

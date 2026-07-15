@@ -1,0 +1,18 @@
+<div class="flex flex-col gap-2 w-full font-Geist-Mono">
+
+    <label class="text-[#1E293B] font-semibold text-[15px]">
+        {{ label }}
+    </label>
+
+    <input type="text" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
+        class=" input-placeholder w-full px-4 h-[48px] border text-[14px]  transition-colors duration-200 outline-none"
+        [class]="hasError 
+          ? 'border-[var(--errors)] bg-[#FFF5F5] focus:border-[var(--errors)]' 
+          : 'border-[#CBD5E1] text-[#1E293B] focus:border-[var(--main-blue)]'" />
+
+    @if (hasError) {
+    <p class="text-[var(--errors)] text-[13px] mt-1 font-medium">
+        Your {{ label | lowercase }} is required
+    </p>
+    }
+</div>

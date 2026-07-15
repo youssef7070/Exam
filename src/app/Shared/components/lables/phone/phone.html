@@ -1,0 +1,37 @@
+<div class="flex flex-col gap-2 w-full font-Geist-Mono">
+    <label class="text-[#1E293B] font-semibold text-[15px]">
+        {{ label }}
+    </label>
+
+    <div class="flex items-center w-full border rounded-[4px] h-[48px] overflow-hidden transition-colors duration-200 bg-white"
+        [class]="hasError 
+      ? 'border-[#EF4444] bg-[#FFF5F5] focus-within:border-[#EF4444] focus-within:ring-1 focus-within:ring-[#EF4444]' 
+      : 'border-[#CBD5E1] focus-within:border-[#2563EB] focus-within:ring-1 focus-within:ring-[#2563EB]'">
+        <div (click)="toggleDropdown()"
+            class="flex items-center gap-1.5 px-3 border-r border-[#CBD5E1] h-full bg-[#F8FAFC] hover:bg-[#F1F5F9] active:bg-[#E2E8F0] transition-colors duration-150 cursor-pointer select-none">
+            <img src="https://flagcdn.com/w20/eg.png" alt="Egypt Flag"
+                class="w-5 h-3.5 object-cover rounded-[1px] shadow-sm" />
+            <span class="text-[#1E293B] text-[14px] font-medium tracking-tight">EG(+20)</span>
+
+            <svg class="w-3.5 h-3.5 text-[#64748B] transition-transform duration-200"
+                [class.rotate-180]="isDropdownOpen" fill="none" stroke="currentColor" stroke-width="2.5"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+
+        <input type="tel" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
+            class="flex-1 px-4 h-full text-[14px]  outline-none text-[#1E293B] placeholder-[#94A3B8] bg-transparent" />
+    </div>
+
+    @if (hasError) {
+    <p class="text-[var(--errors)] text-[13px] mt-1 font-medium flex items-center gap-1">
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
+        </svg>
+        Your {{ label | lowercase }} is required
+    </p>
+    }
+</div>
