@@ -1,9 +1,9 @@
-import { LowerCasePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { InputErrorMessage } from '../../feedback/input-error-message/input-error-message';
 
 @Component({
   selector: 'app-email',
-  imports: [LowerCasePipe],
+  imports: [InputErrorMessage],
   templateUrl: './email.html',
   styleUrl: './email.css',
 })

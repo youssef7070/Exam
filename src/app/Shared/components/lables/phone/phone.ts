@@ -1,9 +1,10 @@
-import { LowerCasePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { UpperCasePipe } from '@angular/common';
+import { Component, EventEmitter, Input, Output, ElementRef, HostListener } from '@angular/core';
+import { InputErrorMessage } from '../../feedback/input-error-message/input-error-message';
 
 @Component({
   selector: 'app-phone',
-  imports: [LowerCasePipe],
+  imports: [UpperCasePipe, InputErrorMessage],
   templateUrl: './phone.html',
   styleUrl: './phone.css',
 })
@@ -15,9 +16,41 @@ export class Phone {
   @Input() hasError: boolean = false;
 
   @Output() valueChange = new EventEmitter<string>();
-  @Output() blur = new EventEmitter<void>();
+  @Output() blurred = new EventEmitter<void>();
+  @Output() countryChange = new EventEmitter<any>();
 
   isDropdownOpen = false;
+
+  countries: any[] = [
+    { name: 'Egypt', code: 'eg', dialCode: '+20' },
+    { name: 'Saudi Arabia', code: 'sa', dialCode: '+966' },
+    { name: 'United Arab Emirates', code: 'ae', dialCode: '+971' },
+    { name: 'Kuwait', code: 'kw', dialCode: '+965' },
+    { name: 'Qatar', code: 'qa', dialCode: '+974' },
+    { name: 'Jordan', code: 'jo', dialCode: '+962' },
+  ];
+
+  selectedCountry: any = this.countries[0];
+
+  constructor(private ElementRef: ElementRef) { }
+
+  // لإغلاق القائمة المنسدلة عند النقر في أي مكان خارج المكون
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.ElementRef.nativeElement.contains(event.target)) {
+      this.isDropdownOpen = false;
+    }
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  selectCountry(country: any): void {
+    this.selectedCountry = country;
+    this.isDropdownOpen = false;
+    this.countryChange.emit(this.selectedCountry);
+  }
 
   onInput(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
@@ -26,14 +59,8 @@ export class Phone {
   }
 
   onBlur(): void {
-    this.blur.emit();
-  }
-
-  toggleDropdown(): void {
-    this.isDropdownOpen = !this.isDropdownOpen;
-  }
-
-
-
+    this.blurred.emit();
+  };
 
 }
+

@@ -8,9 +8,9 @@ import { Component, ElementRef, EventEmitter, Input, Output, QueryList, ViewChil
 })
 export class Otp {
 
-
   @Input() length: number = 6;
   @Output() onCodeCompleted = new EventEmitter<string>();
+  @Output() onEnter = new EventEmitter<void>(); // 🟢 إرسال حدث عند ضغط Enter
 
   otpValues: string[] = [];
   activeIndex: number = 0;
@@ -19,6 +19,12 @@ export class Otp {
 
   ngOnInit() {
     this.otpValues = new Array(this.length).fill('');
+  }
+
+  // 🟢 استلام ضغطة Enter وإرسال الحدث
+  onEnterPressed(event: Event) {
+    event.preventDefault(); // منع السلوك الافتراضي الذي قد يسبب مشاكل
+    this.onEnter.emit();
   }
 
   onInputChange(input: HTMLInputElement, index: number) {
@@ -50,12 +56,33 @@ export class Otp {
 
   private checkAndEmit() {
     const fullCode = this.otpValues.join('');
-    if (fullCode.length === this.length) {
-      this.onCodeCompleted.emit(fullCode);
-    } else {
-      this.onCodeCompleted.emit('');
-    }
+    this.onCodeCompleted.emit(fullCode.length === this.length ? fullCode : '');
   }
 
+  getCurrentCode(): string {
+    return this.otpValues.join('');
+  }
 
+  onPaste(event: ClipboardEvent): void {
+    event.preventDefault();
+    const digits = (event.clipboardData?.getData('text') ?? '')
+      .replace(/\D/g, '')
+      .slice(0, this.length);
+
+    if (!digits) {
+      return;
+    }
+
+    this.otpValues = new Array(this.length).fill('');
+    digits.split('').forEach((digit, index) => {
+      this.otpValues[index] = digit;
+    });
+
+    this.otpElements?.forEach((element, index) => {
+      element.nativeElement.value = this.otpValues[index] || '';
+    });
+
+    this.activeIndex = Math.min(digits.length, this.length - 1);
+    this.checkAndEmit();
+  }
 }

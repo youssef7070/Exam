@@ -1,17 +1,22 @@
-<div class="flex flex-col gap-2 w-full font-Geist-Mono">
+<div class="flex flex-col gap-2 w-full font-Geist-Mono relative">
     <label class="text-[#1E293B] font-semibold text-[15px]">
         {{ label }}
     </label>
 
-    <div class="flex items-center w-full border rounded-[4px] h-[48px] overflow-hidden transition-colors duration-200 bg-white"
-        [class]="hasError 
+    <div class="flex items-center w-full border rounded-[4px] h-[48px] transition-colors duration-200 bg-white" [class]="hasError 
       ? 'border-[#EF4444] bg-[#FFF5F5] focus-within:border-[#EF4444] focus-within:ring-1 focus-within:ring-[#EF4444]' 
       : 'border-[#CBD5E1] focus-within:border-[#2563EB] focus-within:ring-1 focus-within:ring-[#2563EB]'">
+
+        <!-- زر فتح/إغلاق القائمة -->
         <div (click)="toggleDropdown()"
             class="flex items-center gap-1.5 px-3 border-r border-[#CBD5E1] h-full bg-[#F8FAFC] hover:bg-[#F1F5F9] active:bg-[#E2E8F0] transition-colors duration-150 cursor-pointer select-none">
-            <img src="https://flagcdn.com/w20/eg.png" alt="Egypt Flag"
-                class="w-5 h-3.5 object-cover rounded-[1px] shadow-sm" />
-            <span class="text-[#1E293B] text-[14px] font-medium tracking-tight">EG(+20)</span>
+
+            <img [src]="'https://flagcdn.com/w20/' + selectedCountry.code + '.png'"
+                [alt]="selectedCountry.name + ' Flag'" class="w-5 h-3.5 object-cover rounded-[1px] shadow-sm" />
+
+            <span class="text-[#1E293B] text-[14px] font-medium tracking-tight">
+                {{ selectedCountry.code | uppercase }}({{ selectedCountry.dialCode }})
+            </span>
 
             <svg class="w-3.5 h-3.5 text-[#64748B] transition-transform duration-200"
                 [class.rotate-180]="isDropdownOpen" fill="none" stroke="currentColor" stroke-width="2.5"
@@ -20,18 +25,29 @@
             </svg>
         </div>
 
+        <!-- حقل أدخال رقم الهاتف -->
         <input type="tel" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
-            class="flex-1 px-4 h-full text-[14px]  outline-none text-[#1E293B] placeholder-[#94A3B8] bg-transparent" />
+            class="flex-1 px-4 h-full text-[14px] outline-none text-[#1E293B] placeholder-[#94A3B8] bg-transparent" />
     </div>
 
+    <!-- القائمة المنسدلة للدول -->
+    @if (isDropdownOpen) {
+    <div
+        class="absolute top-[80px] left-0 z-50 w-64 max-h-60 overflow-y-auto bg-white border border-[#CBD5E1] rounded-[4px] shadow-lg py-1">
+        @for (country of countries; track country.code) {
+        <button type="button" (click)="selectCountry(country)"
+            class="flex items-center gap-3 w-full px-3 py-2 text-left hover:bg-[#F1F5F9] transition-colors text-[14px] text-[#1E293B]">
+            <img [src]="'https://flagcdn.com/w20/' + country.code + '.png'" [alt]="country.name + ' Flag'"
+                class="w-5 h-3.5 object-cover rounded-[1px] shadow-sm" />
+            <span class="flex-1 font-medium">{{ country.name }}</span>
+            <span class="text-[#64748B] text-[13px]">{{ country.dialCode }}</span>
+        </button>
+        }
+    </div>
+    }
+
+    <!-- رسالة الخطأ -->
     @if (hasError) {
-    <p class="text-[var(--errors)] text-[13px] mt-1 font-medium flex items-center gap-1">
-        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                clip-rule="evenodd" />
-        </svg>
-        Your {{ label | lowercase }} is required
-    </p>
+    <app-input-error-message [fieldLabel]="label" [showIcon]="true" />
     }
 </div>

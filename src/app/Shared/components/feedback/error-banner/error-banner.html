@@ -1,0 +1,11 @@
+<div class="relative border border-[var(--errors)] bg-[#FFF5F5] rounded-sm py-3.5 px-4" [class]="containerClass"
+    role="alert">
+    <div
+        class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full border border-[var(--errors)] bg-white flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5"
+            stroke="var(--errors)" class="w-3 h-3" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+    </div>
+    <p class="text-center text-[var(--errors)] text-[14px] font-normal">{{ message }}</p>
+</div>

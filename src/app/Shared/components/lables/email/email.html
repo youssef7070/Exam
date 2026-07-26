@@ -11,8 +11,6 @@
           : 'border-[#CBD5E1] text-[#1E293B] focus:border-[var(--main-blue)]'" />
 
     @if (hasError) {
-    <p class="text-[var(--errors)] text-[13px] mt-1 font-medium">
-        Your {{ label | lowercase }} is required
-    </p>
+    <app-input-error-message [fieldLabel]="label" />
     }
 </div>

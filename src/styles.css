@@ -6,6 +6,7 @@
 
 
 @theme {
+    /* colors */
     --main-blue: #155DFC;
     --main-gray: #9CA3AF;
     --border-gray: #E5E7EB;
@@ -13,17 +14,14 @@
     --Lable-color-name: #1F2937;
     --lable-text: #E5E7EB;
 
+    /* fonts */
     --font-Geist-Mono: "Geist Mono";
-
     --font-inter: "Inter";
 }
 
 
 @layer components {
 
-    /* .theContainer {
-        @apply w-11/12 mx-auto;
-    } */
 
     .Black-Text {
         @apply text-[30px] font-bold font-inter
@@ -47,10 +45,9 @@
     }
 
 
-
-
-
 }
+
+/* mobile */
 
 .auth-container {
     display: flex;
@@ -69,7 +66,11 @@
     flex-direction: column;
     justify-content: center;
     background-color: #ffffff;
+    padding-inline: 24px;
+    padding-block: 48px;
 }
+
+/* laptop */
 
 @media (min-width: 768px) {
     .auth-container {
@@ -82,10 +83,13 @@
 
     .auth-content {
         flex: 1;
-        padding: 60px;
+
+
     }
 }
 
+
+/* ----------------- */
 
 /* eye */
 

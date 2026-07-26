@@ -1,9 +1,10 @@
-<div class=" font-Geist-Mono flex gap-4 justify-between w-2/4 mx-auto my-1" dir="ltr">
+<div class="font-Geist-Mono flex gap-4 justify-between w-2/4 mx-auto my-1" dir="ltr" (paste)="onPaste($event)">
     @for (box of [].constructor(length); track $index) {
     <input #otpBox type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" [value]="otpValues[$index] || ''"
         (input)="onInputChange(otpBox, $index)" (keydown.backspace)="onBackspace(otpBox, $index)"
-        class="w-[40px] h-[40px] border text-center text-[16px] font-normal  outline-none transition-all " [class]="activeIndex === $index 
-          ? 'border-[var(--main-blue)] text-[var(--main-blue)] bg-white shadow-sm' 
-          : 'border-[#CBD5E1] text-gray-800 bg-slate-50 focus:border-[var(--main-blue)]'" />
+        (keydown.enter)="onEnterPressed($event)"
+        class="w-[40px] h-[40px] border text-center text-[16px] font-normal outline-none transition-all" [class]="activeIndex === $index 
+             ? 'border-[var(--main-blue)] text-[var(--main-blue)] bg-white shadow-sm' 
+             : 'border-[#CBD5E1] text-gray-800 bg-slate-50 focus:border-[var(--main-blue)]'" />
     }
 </div>

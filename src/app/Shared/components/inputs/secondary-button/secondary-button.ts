@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, output, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -13,5 +13,7 @@ export class SecondaryButton {
   @Input() type: 'button' | 'submit' = 'button';
   @Output() onClick = new EventEmitter<MouseEvent>();
   @Input() routerLink: string | any[] | null = null;
+
+  @Input() disabled: boolean = false;
 
 }

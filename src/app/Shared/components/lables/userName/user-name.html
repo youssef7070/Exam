@@ -5,14 +5,12 @@
     </label>
 
     <input type="text" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
-        class=" input-placeholder  w-full px-4 h-[46px] border text-[14px]  transition-colors duration-200 outline-none"
+        class=" input-placeholder w-full px-4 h-[46px] border text-[14px]  transition-colors duration-200 outline-none"
         [class]="hasError 
           ? 'border-[var(--errors)]  focus:border-[var(--errors)]' 
           : ' focus:border-[var(--main-blue)] border-[var(--border-gray)]' " />
 
     @if (hasError) {
-    <p class="error-text">
-        Your {{ label | lowercase }} is required
-    </p>
+    <app-input-error-message [fieldLabel]="label" />
     }
 </div>
