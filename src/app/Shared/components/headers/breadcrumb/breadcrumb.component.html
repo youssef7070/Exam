@@ -1,0 +1,20 @@
+<nav class="flex p-4 text-gray-400 font-normal font-Geist-Mono text-[14px]" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center gap-2.5">
+        @for (item of displayItems; track item.label; let last = $last; let index = $index) {
+            <li class="inline-flex items-center gap-2.5" [attr.aria-current]="last ? 'page' : null">
+                @if (index > 0) {
+                    <span class="text-gray-400">/</span>
+                }
+
+                @if (last || !item.link) {
+                    <span class="inline-flex items-center text-[var(--main-blue)]">{{ item.label }}</span>
+                } @else {
+                    <a [routerLink]="item.link" [queryParams]="item.queryParams ?? null"
+                        class="inline-flex items-center hover:text-gray-600 transition-colors duration-150 cursor-pointer">
+                        {{ item.label }}
+                    </a>
+                }
+            </li>
+        }
+    </ol>
+</nav>

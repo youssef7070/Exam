@@ -1,0 +1,40 @@
+<app-breadcrumb [items]="breadcrumbItems"></app-breadcrumb>
+
+<div class="p-6 grid gap-6">
+
+    <app-header></app-header>
+
+    <!-- Diplomas -->
+    <div class="w-full flex justify-center">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5  w-full  justify-items-center">
+
+            @for (diploma of diplomas(); track diploma.id) {
+            <div (click)="navigateToExams(diploma.id)"
+                class="relative group w-full max-w-[336px] aspect-[3/4] overflow-hidden shadow-md border border-sky-400/20 bg-slate-800 cursor-pointer">
+
+                <!-- Background Image -->
+                <img [src]="diploma.image" [alt]="diploma.title"
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy" />
+
+                <!-- Floating Overlay Card (Padded from bottom, left, and right) -->
+                <div
+                    class="absolute bottom-2.5 left-2.5 right-2.5 p-4 gap-1.5 bg-[#155DFC]/75 backdrop-blur-[12px] text-white flex flex-col justify-start rounded-sm border border-white/10 shadow-lg">
+                    <h3 class="font-Geist-Mono text-[20px] font-semibold ">
+                        {{ diploma.title }}
+                    </h3>
+                    <p class="font-Geist-Mono text-[14px] font-normal  ">
+                        {{ diploma.description }}
+                    </p>
+                </div>
+
+            </div>
+            } @empty {
+            <div class="col-span-full text-center text-slate-400 font-mono py-12">
+                No diplomas found.
+            </div>
+            }
+
+        </div>
+    </div>
+</div>

@@ -1,11 +1,13 @@
-<div class="auth-container flex">
+<div class="auth-container">
     <div class="auth-sidebar">
         <app-fixed-side />
     </div>
 
     <div class="auth-content flex flex-col justify-center items-center bg-white">
         <div class="max-w-[452px] flex flex-col w-full">
+            <!-- for auth content pages and it will get it from auth outlet -->
             <router-outlet />
+
         </div>
     </div>
 </div>

@@ -3,7 +3,6 @@ import { userName } from "../../../../Shared/components/lables/userName/user-nam
 import { Password } from "../../../../Shared/components/lables/password/password";
 import { PrimaryButton } from "../../../../Shared/components/inputs/primary-button/primary-button";
 import { Router, RouterLink } from '@angular/router';
-import { ErrorBanner } from "../../../../Shared/components/feedback/error-banner/error-banner";
 import { AuthService } from '../../services/auth.service';
 import { Iauth } from '../../models/iauth.interface';
 
@@ -44,7 +43,6 @@ export class Login {
     this.passwordTouched = true;
   }
 
-  // دالة متكاملة لاستخراج نص الخطأ من الـ API مهما كان شكله
   private extractErrorMessage(err: any): string {
     if (typeof err?.error === 'string') return err.error;
     return err?.error?.message ||

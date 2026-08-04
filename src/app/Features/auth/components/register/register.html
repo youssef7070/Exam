@@ -51,7 +51,7 @@
         </app-email>
     </div>
 
-    <!-- بنر الخطأ للخطوة 1 -->
+
     @if (showGeneralError) {
     <div
         class="p-3 my-2 bg-red-50 border border-red-300 text-red-600 rounded-lg text-sm font-medium flex items-center gap-2">
@@ -64,15 +64,15 @@
     </div>
     }
 
-        <div class="py-6">
-            <app-secondary-button text="Next" type="submit" [disabled]="isLoading">
-            </app-secondary-button>
-        </div>
+    <div class="py-6">
+        <app-secondary-button text="Next" type="submit" [disabled]="isLoading">
+        </app-secondary-button>
+    </div>
 
-        <p class="text-center font-Geist-Mono text-gray-500 text-[14px] mt-3 font-medium">
-            Already have an account?
-            <a routerLink="/login" class="text-[var(--main-blue)] cursor-pointer font-medium hover:underline">Login</a>
-        </p>
+    <p class="text-center font-Geist-Mono text-gray-500 text-[14px] mt-3 font-medium">
+        Already have an account?
+        <a routerLink="/login" class="text-[var(--main-blue)] cursor-pointer font-medium hover:underline">Login</a>
+    </p>
 </form>
 }
 
@@ -94,7 +94,7 @@
         </app-otp>
     </div>
 
-    <!-- بنر الخطأ للخطوة 2 -->
+
     @if (otpError || showGeneralError) {
     <div
         class="p-3 mb-4 bg-red-50 border border-red-300 text-red-600 rounded-lg text-sm font-medium flex items-center gap-2">
@@ -170,7 +170,7 @@
         (valueChange)="onConfirmPasswordChange($event)" (blurred)="onConfirmPasswordBlur()" [required]="true">
     </app-password>
 
-    <!-- بنر الخطأ للخطوة 4 -->
+
     @if (showGeneralError) {
     <div
         class="p-3 my-2 bg-red-50 border border-red-300 text-red-600 rounded-lg text-sm font-medium flex items-center gap-2">

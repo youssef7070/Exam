@@ -8,4 +8,4 @@ import { FixedSide } from '../../components/fixed-side/fixed-side';
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.css',
 })
-export class AuthLayout {}
+export class AuthLayout { }
