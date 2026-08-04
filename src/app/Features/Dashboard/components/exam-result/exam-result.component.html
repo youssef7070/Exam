@@ -1,0 +1,123 @@
+<app-breadcrumb [items]="breadcrumbItems()"></app-breadcrumb>
+
+<div class="min-h-screen bg-slate-50 p-6 font-mono">
+    <!-- Top Banner Header -->
+    <div class="mb-6 flex gap-2.5">
+        <button
+            class="flex h-[64px] w-[50px] shrink-0 items-center justify-center rounded border border-blue-600 bg-white hover:bg-slate-50 transition-colors"
+            aria-label="Go back">
+            <img src="/diplomas/chevron-left.svg" alt="" class="w-5 h-5" />
+        </button>
+
+        <div class="flex h-[64px] w-full items-center gap-4 rounded bg-[#1d61e8] px-5">
+            <img src="/diplomas/circle-question-mark-white.svg" alt="" class="h-10 w-10 shrink-0" />
+            <h1 class="text-2xl font-bold text-white">{{ examTitle() }}</h1>
+        </div>
+    </div>
+
+    <!-- Exam Info & Progress Bar Section -->
+    <div class="mb-6 space-y-2">
+        <div class="flex items-center justify-between text-sm">
+            <p class="font-medium text-slate-500">{{ examTitle() }}</p>
+            <p class="font-bold text-slate-500">
+                Question <strong class="text-blue-600">{{ currentIndex() + 1 }}</strong> of {{ totalQuestions() }}
+            </p>
+        </div>
+
+        <!-- Progress Bar Track -->
+        <div class="h-3.5 w-full overflow-hidden  bg-blue-100/60">
+            <div class="h-full bg-[#1d61e8] transition-all duration-300" [style.width.%]="progressPercentage()"></div>
+        </div>
+    </div>
+
+    <!-- Results Section Header -->
+    <h2 class="mb-4 text-2xl font-Geist-Mono font-semibold text-blue-600">Results:</h2>
+
+    <!-- Main Grid Layout -->
+    <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-12">
+
+        <!-- Left Box: Donut Chart & Legend -->
+        <div
+            class="flex flex-col items-center justify-center  border border-blue-200 bg-blue-50 p-9 gap-6 shadow-sm min-h-[380px] md:col-span-4">
+
+            <!-- Donut Chart -->
+            <div class="relative mb-8 flex h-[203px] w-[203px] p-2.5 gap-2.5 shrink-0 items-center justify-center rounded-full shadow-inner"
+                [style.background]="'conic-gradient(#00BC7D ' + correctPercentage() + '%, #EF4444 ' + correctPercentage() + '% 100%)'">
+                <!-- Inner Cutout Circle -->
+                <div class="h-32 w-32 rounded-full bg-blue-50"></div>
+            </div>
+
+            <!-- Stats Legend -->
+            <div class="w-full p-2.5 text-[14px] font-medium font-Geist-Mono text-black ">
+                <div class="flex  gap-2.5">
+                    <span class="h-4 w-4  bg-emerald-500"></span>
+                    <span>Correct: {{ correctCount() }}</span>
+                </div>
+                <div class="flex  gap-2.5">
+                    <span class="h-4 w-4  bg-red-500"></span>
+                    <span>Incorrect: {{ incorrectCount() }}</span>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <!-- Right Box: Scrollable Questions Container -->
+        <div
+            class="max-h-[400px] p-1.5 overflow-y-auto  border border-dashed border-blue-300 bg-white/60 p-6 shadow-sm md:col-span-8">
+            @for (question of questions(); track question.id) {
+            <div class=" grid p-2.5 gap-2.5">
+                <!-- Question Title -->
+                <h3 class="font-Geist-Mono font-semibold text-[20px] text-blue-600">
+                    {{ question.text }}
+                </h3>
+
+                <!-- Options List -->
+                <div class="space-y-2">
+                    @for (answer of question.answers; track answer.id) {
+                    <div class="flex items-center gap-3 rounded-md p-3 text-xs font-medium transition-colors" [ngClass]="{
+                  'bg-[#fde8e8] text-gray-600': answer.isSelected && !answer.isCorrect,
+                  'bg-[#e6f9f0] text-emerald-600': answer.isCorrect,
+                  'bg-white text-slate-600 border border-slate-100': !answer.isSelected && !answer.isCorrect
+                }">
+                        <!-- Custom Radio Indicator -->
+                        <span
+                            class="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-all"
+                            [ngClass]="{
+                    'border-red-600 bg-red-600': answer.isSelected && !answer.isCorrect,
+                    'border-emerald-600 bg-emerald-600': answer.isCorrect,
+                    'border-gray-50 bg-transparent': !answer.isSelected && !answer.isCorrect
+                  }">
+                            @if (answer.isSelected && !answer.isCorrect) {
+                            <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+                            }
+                            @if (answer.isCorrect) {
+                            <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+                            }
+                        </span>
+
+                        <span class="font-Geist-Mono font-normal text-[14px] text-gray-800">{{ answer.text }}</span>
+                    </div>
+                    }
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+
+    <!-- Bottom Action Buttons -->
+    <div class="grid grid-cols-2 gap-4 pt-4">
+        <button (click)="restartExam()"
+            class="flex items-center justify-center gap-2.5  bg-gray-200 py-3.5 text-[14px] font-medium text-gray-800 transition hover:bg-gray-300">
+            <img src="/diplomas/restart.svg" alt="" class="size-[18px]">
+            Restart
+        </button>
+
+        <button (click)="exploreExams()"
+            class="flex items-center justify-center gap-2.5  bg-blue-600 py-3.5 text-[14px] font-medium text-white transition hover:bg-blue-700">
+            <img src="/diplomas/folder-search.svg" alt="" srcset="" class="size-[18px]">
+            Explore
+        </button>
+    </div>
+</div>
