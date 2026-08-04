@@ -2,23 +2,24 @@ import { Routes } from '@angular/router';
 import { authRoutes } from './Features/auth/auth.routes';
 import { authGuard } from './Core/auth/auth.guard';
 import { HomeComponent } from './Features/home/home.component';
-import { dashRoutes } from './Features/Dashboard/dashboard.routes';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard/diplomas',
-    pathMatch: 'full'
+    canActivate: [authGuard],
+    component: HomeComponent,
+    pathMatch: 'full',
+    title: 'Home'
   },
   {
     path: 'home',
-    redirectTo: 'dashboard/diplomas',
-    pathMatch: 'full'
+    canActivate: [authGuard],
+    component: HomeComponent,
+    title: 'Home'
   },
-  ...dashRoutes,
   ...authRoutes,
   {
     path: '**',
-    redirectTo: 'dashboard/diplomas'
+    redirectTo: 'login'
   }
 ];

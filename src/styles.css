@@ -7,8 +7,6 @@
 
 @theme {
     /* colors */
-
-    /*blue 600  */
     --main-blue: #155DFC;
     --main-gray: #9CA3AF;
     --border-gray: #E5E7EB;
@@ -49,8 +47,6 @@
 
 }
 
-/* ---------------- Auth ---------------- */
-
 /* mobile */
 
 .auth-container {
@@ -89,49 +85,6 @@
         flex: 1;
 
 
-    }
-}
-
-
-/* ---------------- Dashboard ---------------- */
-
-.dash-container {
-    display: flex;
-    min-height: 100vh;
-    width: 100%;
-}
-
-.dash-sidebar {
-    width: 100%;
-}
-
-.dash-content {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-/* laptop */
-
-@media (min-width: 768px) {
-    .dash-container {
-        flex-direction: row;
-    }
-
-    .dash-sidebar {
-        width: 326px;
-        scrollbar-width: none;
-        flex-shrink: 0;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow-y: auto;
-        border-right: 1px solid var(--border-gray);
-    }
-
-    .dash-content {
-        flex: 1;
-        min-height: 100vh;
     }
 }
 

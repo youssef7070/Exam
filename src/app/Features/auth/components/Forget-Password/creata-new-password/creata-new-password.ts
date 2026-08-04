@@ -31,7 +31,7 @@ export class CreataNewPassword implements OnInit {
   isLoading = false;
 
   ngOnInit() {
-    // Read the token passed in the link from the email
+    // قراءة الـ Token الممرر في الرابط القادم من الإيميل
     this.route.queryParams.subscribe(params => {
       this.token = params['token'] || params['Token'] || '';
       console.log('Token received from URL:', this.token);

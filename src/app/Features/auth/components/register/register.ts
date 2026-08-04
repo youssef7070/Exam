@@ -13,6 +13,7 @@ import { Router, RouterLink } from "@angular/router";
 import { FlowbiteService } from '../../../../flowbite.service';
 import { isPasswordMatching } from '../../../../Shared/utilities/validators';
 import { AuthService } from '../../services/auth.service';
+import { ErrorBanner } from "../../../../Shared/components/feedback/error-banner/error-banner";
 
 @Component({
   selector: 'app-register',
@@ -26,7 +27,7 @@ import { AuthService } from '../../services/auth.service';
     Password,
     PrimaryButton,
     RouterLink,
-    // ErrorBanner
+    ErrorBanner
   ],
   templateUrl: './register.html',
   styleUrl: './register.css',
@@ -83,7 +84,7 @@ export class Register implements OnInit {
     this.errorMessage = '';
   }
 
-  // Helper to extract the error message from the API regardless of its shape
+  // دالة متكاملة لاستخراج نص الخطأ من الـ API مهما كان شكله
   private extractErrorMessage(err: any): string {
     if (typeof err?.error === 'string') return err.error;
     return err?.error?.message ||

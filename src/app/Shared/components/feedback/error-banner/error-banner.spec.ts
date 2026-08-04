@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiplomasComponent } from './diplomas.component';
+import { ErrorBanner } from './error-banner';
 
-describe('DiplomasComponent', () => {
-  let component: DiplomasComponent;
-  let fixture: ComponentFixture<DiplomasComponent>;
+describe('ErrorBanner', () => {
+  let component: ErrorBanner;
+  let fixture: ComponentFixture<ErrorBanner>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DiplomasComponent],
+      imports: [ErrorBanner],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DiplomasComponent);
+    fixture = TestBed.createComponent(ErrorBanner);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -10,7 +10,7 @@ export class Otp {
 
   @Input() length: number = 6;
   @Output() onCodeCompleted = new EventEmitter<string>();
-  @Output() onEnter = new EventEmitter<void>(); // Emit an event when Enter is pressed
+  @Output() onEnter = new EventEmitter<void>(); // 🟢 إرسال حدث عند ضغط Enter
 
   otpValues: string[] = [];
   activeIndex: number = 0;
@@ -21,9 +21,9 @@ export class Otp {
     this.otpValues = new Array(this.length).fill('');
   }
 
-  // Handle Enter key press and emit the event
+  // 🟢 استلام ضغطة Enter وإرسال الحدث
   onEnterPressed(event: Event) {
-    event.preventDefault(); // Prevent the default behavior that may cause issues
+    event.preventDefault(); // منع السلوك الافتراضي الذي قد يسبب مشاكل
     this.onEnter.emit();
   }
 

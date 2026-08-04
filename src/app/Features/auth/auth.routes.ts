@@ -42,8 +42,6 @@ export const authRoutes: Routes = [
         title: 'Forget Reset Password Message',
       },
       {
-        // not  canActivate: [guestGuard]
-        // beacuse it return link to email and make login
         path: 'create-new-password',
         loadComponent: () =>
           import('./components/Forget-Password/creata-new-password/creata-new-password').then(

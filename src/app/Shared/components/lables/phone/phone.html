@@ -7,7 +7,7 @@
       ? 'border-[#EF4444] bg-[#FFF5F5] focus-within:border-[#EF4444] focus-within:ring-1 focus-within:ring-[#EF4444]' 
       : 'border-[#CBD5E1] focus-within:border-[#2563EB] focus-within:ring-1 focus-within:ring-[#2563EB]'">
 
-
+        <!-- زر فتح/إغلاق القائمة -->
         <div (click)="toggleDropdown()"
             class="flex items-center gap-1.5 px-3 border-r border-[#CBD5E1] h-full bg-[#F8FAFC] hover:bg-[#F1F5F9] active:bg-[#E2E8F0] transition-colors duration-150 cursor-pointer select-none">
 
@@ -25,12 +25,12 @@
             </svg>
         </div>
 
-
+        <!-- حقل أدخال رقم الهاتف -->
         <input type="tel" [placeholder]="placeholder" [value]="value" (input)="onInput($event)" (blur)="onBlur()"
             class="flex-1 px-4 h-full text-[14px] outline-none text-[#1E293B] placeholder-[#94A3B8] bg-transparent" />
     </div>
 
-
+    <!-- القائمة المنسدلة للدول -->
     @if (isDropdownOpen) {
     <div
         class="absolute top-[80px] left-0 z-50 w-64 max-h-60 overflow-y-auto bg-white border border-[#CBD5E1] rounded-[4px] shadow-lg py-1">
@@ -46,7 +46,7 @@
     </div>
     }
 
-
+    <!-- رسالة الخطأ -->
     @if (hasError) {
     <app-input-error-message [fieldLabel]="label" [showIcon]="true" />
     }

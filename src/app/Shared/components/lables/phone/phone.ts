@@ -34,7 +34,7 @@ export class Phone {
 
   constructor(private ElementRef: ElementRef) { }
 
-  // Close the dropdown when clicking anywhere outside the component
+  // لإغلاق القائمة المنسدلة عند النقر في أي مكان خارج المكون
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     if (!this.ElementRef.nativeElement.contains(event.target)) {
