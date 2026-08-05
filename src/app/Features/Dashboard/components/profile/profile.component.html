@@ -1,0 +1,169 @@
+<div class="w-full max-w-[600px] flex flex-col gap-6 font-inter">
+    <h2 class="text-xl font-semibold text-gray-800">Profile Information</h2>
+
+    <form (submit)="onSaveChanges($event)" class="flex flex-col gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <app-user-name label="Username" placeholder="Enter your username" [value]="usernameValue()"
+                (valueChange)="usernameValue.set($event)"></app-user-name>
+            <app-email label="Email" placeholder="Enter your email" [value]="emailValue()"
+                (valueChange)="emailValue.set($event)"></app-email>
+        </div>
+
+        <app-phone label="Phone Number" placeholder="1012345678" [value]="phoneValue()"
+            (valueChange)="phoneValue.set($event)"></app-phone>
+
+        <!-- Updated Buttons Layout (Matches Reference Image) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <button type="button" (click)="openDeleteModal()" [disabled]="isLoading()"
+                class="w-full py-3 px-4 bg-red-50 hover:bg-red-100 text-red-600 font-medium rounded-md text-sm transition-colors cursor-pointer text-center disabled:opacity-50">
+                Delete My Account
+            </button>
+            <button type="submit" [disabled]="isLoading()"
+                class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md text-sm transition-colors cursor-pointer text-center disabled:opacity-50">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+@if (showGeneralError() && !showSaveModal() && !showDeleteModal()) {
+<div
+    class="fixed bottom-6 right-6 z-40 max-w-sm p-3 bg-red-50 border border-red-300 text-red-600 rounded-lg text-sm font-medium">
+    {{ errorMessage() }}
+</div>
+}
+
+<!-- Save Changes Modal -->
+@if (showSaveModal()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4" (click)="closeSaveModal()">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-[480px] p-6 animate-fade-in"
+        (click)="$event.stopPropagation()">
+
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Verify Email Change</h3>
+            <button type="button" (click)="closeSaveModal()"
+                class="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        @if (saveModalStep() > 1) {
+        <div class="flex items-center justify-between w-full relative px-2 mb-6">
+            <div
+                class="absolute top-1/2 left-0 right-0 h-0.5 border-t-2 border-dashed border-blue-400 -translate-y-1/2 z-0">
+            </div>
+            <div class="absolute top-1/2 left-0 h-0.5 bg-[var(--main-blue)] -translate-y-1/2 z-0 transition-all duration-500 ease-in-out"
+                [style.width.%]="saveModalStep() === 2 ? 100 : 0">
+            </div>
+
+            <div class="z-10 flex items-center justify-center bg-white px-2">
+                <div class="w-2.5 h-2.5 rotate-45 bg-[var(--main-blue)] border-2 border-[var(--main-blue)]"></div>
+            </div>
+
+            <div class="z-10 flex items-center justify-center bg-white px-2">
+                <div class="w-2.5 h-2.5 rotate-45 transition-all duration-300 border-2"
+                    [class.bg-[var(--main-blue)]]="saveModalStep() >= 2"
+                    [class.border-[var(--main-blue)]]="saveModalStep() >= 2" [class.bg-white]="saveModalStep() < 2"
+                    [class.border-blue-400]="saveModalStep() < 2" [class.ring-[6px]]="saveModalStep() === 2"
+                    [class.ring-blue-100]="saveModalStep() === 2">
+                </div>
+            </div>
+        </div>
+        }
+
+        @switch (saveModalStep()) {
+        @case (1) {
+        <form (ngSubmit)="requestEmailVerification($event)" class="flex flex-col">
+            <p class="text-sm text-gray-500 mb-4">Enter your new email address. We will send you a verification code.
+            </p>
+
+            <div class="pb-3">
+                <app-email label="Email" placeholder="user@example.com" [value]="modalEmail()"
+                    [hasError]="modalEmailError()" (valueChange)="modalEmail.set($event)"
+                    (blurred)="onModalEmailBlur()">
+                </app-email>
+            </div>
+
+            @if (showGeneralError()) {
+            <div
+                class="p-3 my-2 bg-red-50 border border-red-300 text-red-600 rounded-lg text-sm font-medium flex items-center gap-2">
+                <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span>{{ errorMessage() }}</span>
+            </div>
+            }
+
+            <div class="pt-4">
+                <app-secondary-button text="Next" type="submit" [disabled]="isLoading()"></app-secondary-button>
+            </div>
+        </form>
+        }
+
+        @case (2) {
+        <form (ngSubmit)="confirmEmailAndSave($event)" class="flex flex-col">
+            <div class="flex flex-col mb-4">
+                <h4 class="text-[20px] font-bold text-[var(--main-blue)] mb-2 font-inter">Verify OTP</h4>
+                <p class="text-[14px] font-normal text-gray-500 leading-relaxed font-Geist-Mono">
+                    Please enter the 6-digits code we have sent to:<br>
+                    <span class="text-gray-800">{{ modalEmail() }}</span>
+                    <a (click)="goToSaveStep(1)"
+                        class="text-[var(--main-blue)] font-medium underline ps-2.5 cursor-pointer">Edit</a>
+                </p>
+            </div>
+
+            <div class="mt-2.5 mb-4 w-full md:w-2/3">
+                <app-otp #saveOtpInput [length]="6" (onCodeCompleted)="onOtpChange($event)"
+                    (onEnter)="confirmEmailAndSave()">
+                </app-otp>
+            </div>
+
+            @if (otpError() || showGeneralError()) {
+            <div
+                class="p-3 mb-4 bg-red-50 border border-red-300 text-red-600 rounded-lg text-sm font-medium flex items-center gap-2">
+                <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                </svg>
+                <span>{{ errorMessage() || 'Verification failed. Please try again.' }}</span>
+            </div>
+            }
+
+            <div class="pt-2">
+                <app-secondary-button text="Confirm" type="submit" [disabled]="isLoading()"></app-secondary-button>
+            </div>
+        </form>
+        }
+        }
+    </div>
+</div>
+}
+
+<!-- Delete Account Modal -->
+@if (showDeleteModal()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4" (click)="closeDeleteModal()">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-[400px] p-6 animate-fade-in"
+        (click)="$event.stopPropagation()">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">Delete Account</h3>
+        <p class="text-sm text-gray-500 mb-6">
+            Are you sure you want to delete your account? This action cannot be undone.
+        </p>
+
+        <div class="flex items-center justify-end gap-3">
+            <button type="button" (click)="closeDeleteModal()" [disabled]="isLoading()"
+                class="px-5 py-2.5 rounded-lg border border-gray-300 text-gray-700 font-medium text-sm hover:bg-gray-50 transition-colors cursor-pointer disabled:opacity-50">
+                Cancel
+            </button>
+            <button type="button" (click)="deleteAccount()" [disabled]="isLoading()"
+                class="px-5 py-2.5 rounded-lg bg-red-600 text-white font-medium text-sm hover:bg-red-700 transition-colors cursor-pointer disabled:opacity-50">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>
+}
