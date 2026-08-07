@@ -1,6 +1,6 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Login } from "./Features/auth/components/login/login";
+import { HttpStatusService } from './Core/services/http-status.service';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +10,5 @@ import { Login } from "./Features/auth/components/login/login";
 })
 export class App {
   protected readonly title = signal('Exam');
+  protected readonly status = inject(HttpStatusService);
 }

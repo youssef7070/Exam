@@ -14,7 +14,7 @@ import { AuthService } from '../../../auth/services/auth.service';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FormsModule, userName, Email, Phone, PrimaryButton, SecondaryButton, Otp],
+  imports: [FormsModule, userName, Email, Phone, SecondaryButton, Otp],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })

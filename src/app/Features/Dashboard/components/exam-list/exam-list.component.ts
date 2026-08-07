@@ -1,7 +1,6 @@
-import { Component, inject, signal, effect, computed } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 import { BreadcrumbComponent } from "../../../../Shared/components/headers/breadcrumb/breadcrumb.component";
 import { SecondaryHeaderComponent } from "../../../../Shared/components/headers/secondary-header/secondary-header.component";
 import { ExamsService } from '../../services/exams.service';
@@ -15,14 +14,13 @@ import { BreadcrumbItem } from '../../../../Shared/models/ibreadcrumb.interface'
   templateUrl: './exam-list.component.html',
   styleUrl: './exam-list.component.css',
 })
-export class ExamListComponent {
+export class ExamListComponent implements OnInit, OnDestroy {
   private readonly examsService = inject(ExamsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private queryParamsSubscription?: Subscription;
 
-  readonly diplomaId = toSignal(
-    this.route.queryParams.pipe(map(params => params['diplomaId'] as string | undefined))
-  );
+  readonly diplomaId = signal<string | undefined>(undefined);
 
   readonly exams = signal<Daum[]>([]);
   readonly isLoading = signal<boolean>(false);
@@ -54,11 +52,18 @@ export class ExamListComponent {
     return items;
   });
 
-  constructor() {
-    effect(() => {
-      const id = this.diplomaId();
+  ngOnInit(): void {
+    this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
+      const id = params['diplomaId'];
+      this.diplomaId.set(id);
       this.fetchExams(id);
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe();
+    }
   }
 
   private fetchExams(diplomaId?: string): void {

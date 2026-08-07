@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { BreadcrumbComponent } from "../../../../Shared/components/headers/breadcrumb/breadcrumb.component";
 import { HeaderComponent } from "../../../../Shared/components/headers/header/header.component";
@@ -13,7 +13,7 @@ import { BreadcrumbItem } from '../../../../Shared/models/ibreadcrumb.interface'
   templateUrl: './diplomas.component.html',
   styleUrl: './diplomas.component.css',
 })
-export class DiplomasComponent {
+export class DiplomasComponent implements OnInit {
   private readonly diplomasService = inject(DiplomasService);
   private readonly router = inject(Router);
 
@@ -24,25 +24,18 @@ export class DiplomasComponent {
 
   // Reactive State Signals
   readonly diplomas = signal<Daum[]>([]);
-  readonly isLoading = signal<boolean>(false);
-  readonly error = signal<string | null>(null);
 
   ngOnInit(): void {
     this.fetchDiplomas();
   }
 
   public fetchDiplomas(): void {
-    this.isLoading.set(true);
-    this.error.set(null);
-
     this.diplomasService.getDiplomas().subscribe({
       next: (res) => {
         this.diplomas.set(res.payload.data);
-        this.isLoading.set(false);
       },
-      error: (err: Error) => {
-        this.error.set(err.message || 'Failed to load diplomas.');
-        this.isLoading.set(false);
+      error: () => {
+        // Error handling is managed globally by the HTTP interceptor.
       }
     });
   }
@@ -53,4 +46,8 @@ export class DiplomasComponent {
   public navigateToExams(diplomaId: string): void {
     this.router.navigate(['/dashboard/exams'], { queryParams: { diplomaId } });
   }
+
+
+
+
 }

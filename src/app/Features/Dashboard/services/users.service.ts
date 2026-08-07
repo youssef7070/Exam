@@ -31,8 +31,8 @@ export class UsersService {
      * POST /api/users/change-password
      * Change password (authenticated)
      */
-    changePassword(payload: { oldPassword?: string; newPassword?: string }): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/change-password`, payload);
+    changePassword(payload: { oldPassword?: string; newPassword?: string }): Observable<string> {
+        return this.http.post<string>(`${this.baseUrl}/change-password`, payload);
     }
 
     /**
@@ -55,8 +55,8 @@ export class UsersService {
      * DELETE /api/users/account
      * Delete own account (disabled for super admin)
      */
-    deleteAccount(): Observable<any> {
-        return this.http.delete<any>(`${this.baseUrl}/account`);
+    deleteAccount(): Observable<string> {
+        return this.http.delete<string>(`${this.baseUrl}/account`);
     }
 
 

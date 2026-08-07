@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Password } from '../../../../Shared/components/lables/password/password';
 import { PrimaryButton } from '../../../../Shared/components/inputs/primary-button/primary-button';
 import { UsersService } from '../../services/users.service';
+import { HttpStatusService } from '../../../../Core/services/http-status.service';
 
 @Component({
   selector: 'app-change-password',
@@ -12,6 +12,7 @@ import { UsersService } from '../../services/users.service';
 })
 export class ChangePasswordComponent {
   private readonly usersService = inject(UsersService);
+  private readonly httpStatus = inject(HttpStatusService);
 
   currentPasswordValue = signal('');
   newPasswordValue = signal('');
@@ -23,57 +24,80 @@ export class ChangePasswordComponent {
   currentPasswordTouched = signal(false);
   newPasswordTouched = signal(false);
   confirmPasswordTouched = signal(false);
-  isLoading = signal(false);
-  showGeneralError = signal(false);
+  readonly isLoading = this.httpStatus.isLoading;
   successMessage = signal('');
-  errorMessage = signal('');
+  validationMessage = signal('');
 
   onCurrentPasswordValueChange(value: string): void {
     this.currentPasswordValue.set(value);
     if (this.currentPasswordTouched()) {
-      this.currentPasswordError.set(!value.trim());
+      this.evaluateCurrentPasswordError();
     }
   }
 
   onNewPasswordValueChange(value: string): void {
     this.newPasswordValue.set(value);
     if (this.newPasswordTouched()) {
-      this.newPasswordError.set(value.trim().length < 8);
+      this.evaluateNewPasswordError();
     }
     if (this.confirmPasswordTouched()) {
-      this.confirmPasswordError.set(this.confirmPasswordValue().trim() !== value.trim());
+      this.evaluateConfirmPasswordError();
     }
   }
 
   onConfirmPasswordValueChange(value: string): void {
     this.confirmPasswordValue.set(value);
     if (this.confirmPasswordTouched()) {
-      this.confirmPasswordError.set(value.trim() !== this.newPasswordValue().trim());
+      this.evaluateConfirmPasswordError();
     }
   }
 
   onCurrentPasswordBlur(): void {
     this.currentPasswordTouched.set(true);
-    this.currentPasswordError.set(!this.currentPasswordValue().trim());
+    this.evaluateCurrentPasswordError();
   }
 
   onNewPasswordBlur(): void {
     this.newPasswordTouched.set(true);
-    this.newPasswordError.set(this.newPasswordValue().trim().length < 8);
+    this.evaluateNewPasswordError();
     if (this.confirmPasswordTouched()) {
-      this.confirmPasswordError.set(this.confirmPasswordValue().trim() !== this.newPasswordValue().trim());
+      this.evaluateConfirmPasswordError();
     }
   }
 
   onConfirmPasswordBlur(): void {
     this.confirmPasswordTouched.set(true);
-    this.confirmPasswordError.set(this.confirmPasswordValue().trim() !== this.newPasswordValue().trim());
+    this.evaluateConfirmPasswordError();
+  }
+
+  private isCurrentPasswordInvalid(): boolean {
+    return !this.currentPasswordValue().trim();
+  }
+
+  private isNewPasswordInvalid(): boolean {
+    return this.newPasswordValue().trim().length < 8;
+  }
+
+  private doPasswordsMismatch(): boolean {
+    return this.confirmPasswordValue().trim() !== this.newPasswordValue().trim();
+  }
+
+  private evaluateCurrentPasswordError(force = false): void {
+    this.currentPasswordError.set((force || this.currentPasswordTouched()) && this.isCurrentPasswordInvalid());
+  }
+
+  private evaluateNewPasswordError(force = false): void {
+    this.newPasswordError.set((force || this.newPasswordTouched()) && this.isNewPasswordInvalid());
+  }
+
+  private evaluateConfirmPasswordError(force = false): void {
+    this.confirmPasswordError.set((force || this.confirmPasswordTouched()) && this.doPasswordsMismatch());
   }
 
   private validatePasswords(force = false): void {
-    this.currentPasswordError.set((force || this.currentPasswordTouched()) && !this.currentPasswordValue().trim());
-    this.newPasswordError.set((force || this.newPasswordTouched()) && this.newPasswordValue().trim().length < 8);
-    this.confirmPasswordError.set((force || this.confirmPasswordTouched()) && this.confirmPasswordValue().trim() !== this.newPasswordValue().trim());
+    this.evaluateCurrentPasswordError(force);
+    this.evaluateNewPasswordError(force);
+    this.evaluateConfirmPasswordError(force);
   }
 
   updatePassword(event?: Event): void {
@@ -83,9 +107,8 @@ export class ChangePasswordComponent {
     this.validatePasswords(true);
 
     if (this.currentPasswordError() || this.newPasswordError() || this.confirmPasswordError()) {
-      this.showGeneralError.set(true);
       this.successMessage.set('');
-      this.errorMessage.set(this.newPasswordError()
+      this.validationMessage.set(this.newPasswordError()
         ? 'New password must be at least 8 characters.'
         : this.confirmPasswordError()
           ? 'Passwords do not match.'
@@ -93,17 +116,14 @@ export class ChangePasswordComponent {
       return;
     }
 
-    this.showGeneralError.set(false);
-    this.errorMessage.set('');
+    this.validationMessage.set('');
     this.successMessage.set('');
-    this.isLoading.set(true);
 
     this.usersService.changePassword({
       oldPassword: this.currentPasswordValue().trim(),
       newPassword: this.newPasswordValue().trim(),
     }).subscribe({
       next: () => {
-        this.isLoading.set(false);
         this.successMessage.set('Password updated successfully.');
         this.currentPasswordTouched.set(false);
         this.newPasswordTouched.set(false);
@@ -112,23 +132,9 @@ export class ChangePasswordComponent {
         this.newPasswordValue.set('');
         this.confirmPasswordValue.set('');
       },
-      error: (err: HttpErrorResponse) => {
-        this.isLoading.set(false);
-        this.showGeneralError.set(true);
-        this.errorMessage.set(this.extractErrorMessage(err));
+      error: () => {
+        this.successMessage.set('');
       },
     });
-  }
-
-  private extractErrorMessage(err: unknown): string {
-    const error = err as { error?: string | { message?: string; Error?: string; err?: string }; message?: string };
-    if (typeof error?.error === 'string') return error.error;
-    return (
-      error?.error?.message ||
-      error?.error?.Error ||
-      error?.error?.err ||
-      error?.message ||
-      'Unable to update password. Please try again.'
-    );
   }
 }
