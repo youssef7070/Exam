@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-secondary-header',
@@ -8,4 +9,9 @@ import { Component, Input } from '@angular/core';
 })
 export class SecondaryHeaderComponent {
   @Input() title: string = 'Dashboard';
+  private readonly location = inject(Location);
+
+  goBack(): void {
+    this.location.back();
+  }
 }

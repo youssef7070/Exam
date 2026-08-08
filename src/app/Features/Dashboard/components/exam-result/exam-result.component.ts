@@ -154,4 +154,9 @@ export class ExamResultComponent implements OnInit {
     const id = this.diplomaId();
     this.router.navigate(['/dashboard/exams'], id ? { queryParams: { diplomaId: id } } : undefined);
   }
+
+  goBack(): void {
+    const id = this.diplomaId();
+    this.router.navigate(['/dashboard/exams'], id ? { queryParams: { diplomaId: id } } : undefined);
+  }
 }

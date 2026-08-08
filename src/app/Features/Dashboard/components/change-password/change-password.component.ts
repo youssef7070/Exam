@@ -132,9 +132,21 @@ export class ChangePasswordComponent {
         this.newPasswordValue.set('');
         this.confirmPasswordValue.set('');
       },
-      error: () => {
+      error: (err) => {
         this.successMessage.set('');
+        this.validationMessage.set(this.extractErrorMessage(err));
       },
     });
+  }
+
+  private extractErrorMessage(err: any): string {
+    if (typeof err?.error === 'string') return err.error;
+    return (
+      err?.error?.message ||
+      err?.error?.Error ||
+      err?.error?.err ||
+      err?.message ||
+      'An unexpected error occurred. Please try again.'
+    );
   }
 }

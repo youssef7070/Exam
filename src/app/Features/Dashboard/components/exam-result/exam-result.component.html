@@ -1,15 +1,15 @@
 <app-breadcrumb [items]="breadcrumbItems()"></app-breadcrumb>
 
-<div class="min-h-screen bg-slate-50 p-6 font-mono">
+<div class="min-h-screen bg-slate-50 p-6 font-Geist-Mono">
     <!-- Top Banner Header -->
     <div class="mb-6 flex gap-2.5">
-        <button
-            class="flex h-[64px] w-[50px] shrink-0 items-center justify-center rounded border border-blue-600 bg-white hover:bg-slate-50 transition-colors"
+        <button (click)="goBack()"
+            class="flex w-[38px] shrink-0 items-center justify-center border border-blue-600 bg-white hover:bg-slate-50 cursor-pointer transition-colors"
             aria-label="Go back">
-            <img src="/diplomas/chevron-left.svg" alt="" class="w-5 h-5" />
+            <img src="/diplomas/chevron-left.svg" alt="" class="w-6 h-6" />
         </button>
 
-        <div class="flex h-[64px] w-full items-center gap-4 rounded bg-[#1d61e8] px-5">
+        <div class="flex h-[64px] w-full items-center gap-4  bg-[#1d61e8] px-5">
             <img src="/diplomas/circle-question-mark-white.svg" alt="" class="h-10 w-10 shrink-0" />
             <h1 class="text-2xl font-bold text-white">{{ examTitle() }}</h1>
         </div>

@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { BreadcrumbComponent } from "../../../../Shared/components/headers/breadcrumb/breadcrumb.component";
 import { SecondaryHeaderComponent } from "../../../../Shared/components/headers/secondary-header/secondary-header.component";
@@ -10,7 +10,7 @@ import { BreadcrumbItem } from '../../../../Shared/models/ibreadcrumb.interface'
 @Component({
   selector: 'app-exam-list',
   standalone: true,
-  imports: [BreadcrumbComponent, SecondaryHeaderComponent],
+  imports: [BreadcrumbComponent, SecondaryHeaderComponent, RouterLink],
   templateUrl: './exam-list.component.html',
   styleUrl: './exam-list.component.css',
 })

@@ -1,44 +1,91 @@
-<div class="min-h-screen w-[326px] p-10 gap-[60px] bg-blue-50 flex flex-col ">
-
+<div class="h-full w-[326px] p-10 gap-[60px] bg-blue-50 flex flex-col">
 
     <!-- logo -->
-    <div class=" flex flex-col gap-2.5  ">
+    <div class="flex flex-col gap-2.5">
+        <img src="/dashboard/Final Logo 1.svg" alt="" class="w-48 h-[37px]">
 
-        <img src="/dashboard/Final Logo 1.svg" alt="" class="w-48 h-[37px] ">
-
-        <div class="flex flex-row  gap-2.5 ">
+        <div class="flex flex-row gap-2.5">
             <img src="/dashboard/folder-code.svg" alt="" class="w-[30px] h-[30px] items-start">
             <p class="font-semibold text-[20px] text-[var(--main-blue)] font-Geist-Mono">Exam App</p>
         </div>
-
     </div>
 
 
-    <!-- chooses -->
-
-    <div class=" flex flex-col gap-2.5">
+    <!-- choices -->
+    <div class="flex flex-col gap-2.5">
 
         <!-- 1 -->
-
-        <a routerLink="/dashboard/diplomas" routerLinkActive="bg-blue-100 font-semibold"
-            [routerLinkActiveOptions]="{ exact: false, paths: 'subset' }"
+        <a routerLink="/dashboard/diplomas" [class.bg-blue-100]="isDiplomasActive()"
             class="flex flex-row gap-2.5 p-4 w-full rounded-lg hover:bg-blue-100 cursor-pointer transition-all duration-200 decoration-transparent">
 
             <img src="/dashboard/cap.svg" alt="" class="w-6 h-6">
-            <p class="font-normal text-[16px]  text-gray-500  font-inter ">Diplomas</p>
-
+            <p class="font-normal text-[16px] text-gray-500 font-inter">Diplomas</p>
         </a>
 
         <!-- 2 -->
-
         <a routerLink="/dashboard/settings" routerLinkActive="bg-blue-100 font-semibold"
-            class="flex flex-row gap-2.5 p-4 w-full rounded-lg hover:bg-blue-100 cursor-pointer transition-all duration-200 decoration-transparent">
+            class="flex flex-row gap-2.5 p-4 w-full  hover:bg-blue-100 cursor-pointer transition-all duration-200 decoration-transparent">
 
             <img src="/dashboard/user.svg" alt="" class="w-6 h-6">
-            <p class="font-normal text-[16px]  text-gray-500  font-inter ">Account Settings</p>
-
+            <p class="font-normal text-[16px] text-gray-500 font-inter">Account Settings</p>
         </a>
+
+    </div>
+
+    <!-- user name -->
+    <div class="mt-auto flex items-center w-full gap-2.5">
+
+        <img src="/dashboard/profile photo.svg" alt="" class="size-[54px] border border-blue-600  shrink-0">
+
+        <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
+            <!-- first name -->
+            <p class="font-Geist-Mono font-medium text-[16px] text-[var(--main-blue)] truncate">
+                {{ firstNameValue() }}
+            </p>
+            <!-- email -->
+            <p class="font-Geist-Mono font-normal text-[14px] text-gray-400 truncate">
+                {{ emailValue() }}
+            </p>
+        </div>
+
+        <button (click)="openModal()" type="button"
+            class=" flex items-center justify-center p-2 hover:bg-blue-100  cursor-pointer transition-all shrink-0">
+            <img src="/ellipsis-vertical.svg" alt="" class="size-[18px]">
+        </button>
 
     </div>
 
 </div>
+
+@if (isModalOpen()) {
+<div (click)="closeModal()" class="fixed inset-0 z-50  flex items-center  bg-black/40 backdrop-blur-xs p-4">
+
+    <div (click)="$event.stopPropagation()"
+        class="w-64 bg-white  shadow-2xl border border-gray-100 p-2 flex flex-col gap-1 transition-all">
+
+        <!-- 1. Account -->
+        <button routerLink="settings/profile" (click)="closeModal()"
+            class="flex items-center gap-1.5 p-4 text-gray-800 hover:bg-gray-200  transition text-left w-full cursor-pointer border border-gray-100">
+            <img src="/dashboard/user.svg" alt="" srcset="" class="w-[18px]">
+            <span class=" font-Geist-Mono font-normal text-[14px] text-gray-800">Account</span>
+        </button>
+
+        <!-- 2. Dashboard -->
+        <button routerLink="dashboard/diplomas" (click)="closeModal()"
+            class="flex items-center gap-1.5 p-4 text-gray-800 hover:bg-gray-200  transition text-left w-full cursor-pointer border border-gray-100">
+            <img src="/bolt.svg" alt="" srcset="" class="w-[18px]">
+            <span class=" font-Geist-Mono font-normal text-[14px] text-gray-800">Dashboard</span>
+        </button>
+
+
+        <!-- 3. Logout -->
+        <button (click)="logout()"
+            class="flex items-center gap-1.5 p-4 text-gray-800 hover:bg-gray-200  transition text-left w-full cursor-pointer border border-gray-100">
+            <img src="/log-out.svg" alt="" srcset="" class="w-[18px]">
+            <span class=" font-Geist-Mono font-normal text-[14px] text-red-600">Logout</span>
+        </button>
+
+    </div>
+
+</div>
+}
