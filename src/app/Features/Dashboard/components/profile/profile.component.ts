@@ -1,7 +1,9 @@
-import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { HttpStatusService } from '../../../../Core/services/http-status.service';
 import { userName } from '../../../../Shared/components/lables/userName/user-name';
 import { Email } from '../../../../Shared/components/lables/email/email';
 import { Phone } from '../../../../Shared/components/lables/phone/phone';
@@ -18,10 +20,13 @@ import { AuthService } from '../../../auth/services/auth.service';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   private readonly usersService = inject(UsersService);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly httpStatus = inject(HttpStatusService);
+
+  private readonly _subscriptions = new Subscription();
 
   @ViewChild('saveOtpInput') saveOtpComponent?: Otp;
 
@@ -198,24 +203,26 @@ export class ProfileComponent implements OnInit {
   }
 
   deleteAccount(): void {
-    if (this.isLoading()) return;
+    if (this.httpStatus.isLoading()) return;
 
-    this.isLoading.set(true);
-
-    this.usersService.deleteAccount().subscribe({
+    // Loading & error are handled globally by the httpStatusInterceptor
+    const sub = this.usersService.deleteAccount().subscribe({
       next: () => {
-        this.isLoading.set(false);
-        localStorage.removeItem('token'); // Remove the token after deletion
+        localStorage.removeItem('token');
         this.closeDeleteModal();
         this.router.navigate(['/login']);
       },
-      error: (err: HttpErrorResponse) => {
-        this.isLoading.set(false);
-        this.showGeneralError.set(true);
-        this.errorMessage.set(this.extractErrorMessage(err));
+      error: () => {
+        // Error is handled globally by the httpStatusInterceptor
         this.closeDeleteModal();
       },
     });
+
+    this._subscriptions.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   private resetSaveModalState(): void {

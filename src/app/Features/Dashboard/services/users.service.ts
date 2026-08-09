@@ -11,50 +11,41 @@ export class UsersService {
     private readonly http = inject(HttpClient);
     private readonly baseUrl = `${environment.baseUrl}/users`;
 
-    /**
-     * GET /api/users/profile
-     * Get current user profile
-     */
-    getUserProfile(): Observable<any> {
+
+    //   Get current user profile
+
+    getUserProfile(): Observable<string> {
         return this.http.get<any>(`${this.baseUrl}/profile`);
     }
 
-    /**
-     * PATCH /api/users/profile
-     * Update profile (firstName, lastName, profilePhoto, phone)
-     */
+    // use payload as parameter
+
+    //    Update profile 
     updateUserProfile(payload: { firstName?: string; lastName?: string; profilePhoto?: string; phone?: string }): Observable<any> {
         return this.http.patch<any>(`${this.baseUrl}/profile`, payload);
     }
 
-    /**
-     * POST /api/users/change-password
-     * Change password (authenticated)
-     */
+    //  Change password (authenticated)
+
     changePassword(payload: { oldPassword?: string; newPassword?: string }): Observable<string> {
         return this.http.post<string>(`${this.baseUrl}/change-password`, payload);
     }
 
-    /**
-     * POST /api/users/email/request
-     * Request email change (sends verification code to new email)
-     */
+
+    //  Request email change (sends verification code to new email)
+
     requestEmailChange(payload: { newEmail: string }): Observable<any> {
         return this.http.post<any>(`${this.baseUrl}/email/request`, payload);
     }
 
-    /**
-     * POST /api/users/email/confirm
-     * Confirm email change with code
-     */
+    // Confirm email change with code
+
     confirmEmailChange(payload: { code: string }): Observable<any> {
         return this.http.post<any>(`${this.baseUrl}/email/confirm`, payload);
     }
 
-    /**
-     * DELETE /api/users/account
-     * Delete own account (disabled for super admin)
-     */
+    // Delete own account 
+
     deleteAccount(): Observable<string> {
         return this.http.delete<string>(`${this.baseUrl}/account`);
     }
