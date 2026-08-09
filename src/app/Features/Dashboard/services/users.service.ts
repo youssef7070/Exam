@@ -34,13 +34,13 @@ export class UsersService {
 
     //  Request email change (sends verification code to new email)
 
-    requestEmailChange(payload: { newEmail: string }): Observable<any> {
+    requestEmailChange(payload: { newEmail: string }): Observable<string> {
         return this.http.post<any>(`${this.baseUrl}/email/request`, payload);
     }
 
     // Confirm email change with code
 
-    confirmEmailChange(payload: { code: string }): Observable<any> {
+    confirmEmailChange(payload: { code: string }): Observable<string> {
         return this.http.post<any>(`${this.baseUrl}/email/confirm`, payload);
     }
 
