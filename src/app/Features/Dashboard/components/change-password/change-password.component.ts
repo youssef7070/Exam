@@ -25,6 +25,7 @@ export class ChangePasswordComponent {
   newPasswordTouched = signal(false);
   confirmPasswordTouched = signal(false);
   readonly isLoading = this.httpStatus.isLoading;
+  readonly httpError = this.httpStatus.errorMessage; // set by httpStatusInterceptor
   successMessage = signal('');
   validationMessage = signal('');
 
@@ -132,21 +133,11 @@ export class ChangePasswordComponent {
         this.newPasswordValue.set('');
         this.confirmPasswordValue.set('');
       },
-      error: (err) => {
+      error: () => {
+        // Error message is set globally by the httpStatusInterceptor via HttpStatusService.errorMessage
         this.successMessage.set('');
-        this.validationMessage.set(this.extractErrorMessage(err));
+        this.validationMessage.set(this.httpError() ?? 'An unexpected error occurred. Please try again.');
       },
     });
-  }
-
-  private extractErrorMessage(err: any): string {
-    if (typeof err?.error === 'string') return err.error;
-    return (
-      err?.error?.message ||
-      err?.error?.Error ||
-      err?.error?.err ||
-      err?.message ||
-      'An unexpected error occurred. Please try again.'
-    );
   }
 }
