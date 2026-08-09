@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { BreadcrumbComponent } from "../../../../Shared/components/headers/breadcrumb/breadcrumb.component";
 import { SecondaryHeaderComponent } from "../../../../Shared/components/headers/secondary-header/secondary-header.component";
 import { ExamsService } from '../../services/exams.service';
@@ -53,11 +53,19 @@ export class ExamListComponent implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
+
+    this.ParamsSubscription();
+
+  }
+
+  ParamsSubscription(): void {
+
     this.queryParamsSubscription = this.route.queryParams.subscribe(params => {
       const id = params['diplomaId'];
       this.diplomaId.set(id);
       this.fetchExams(id);
     });
+
   }
 
   ngOnDestroy(): void {
