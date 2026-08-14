@@ -13,7 +13,6 @@ import { Router, RouterLink } from "@angular/router";
 import { FlowbiteService } from '../../../../flowbite.service';
 import { isPasswordMatching } from '../../../../Shared/utilities/validators';
 import { AuthService } from '../../services/auth.service';
-import { ErrorBanner } from "../../../../Shared/components/feedback/error-banner/error-banner";
 
 @Component({
   selector: 'app-register',
@@ -27,7 +26,6 @@ import { ErrorBanner } from "../../../../Shared/components/feedback/error-banner
     Password,
     PrimaryButton,
     RouterLink,
-    ErrorBanner
   ],
   templateUrl: './register.html',
   styleUrl: './register.css',

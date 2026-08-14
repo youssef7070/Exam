@@ -3,6 +3,8 @@ import { inject } from '@angular/core';
 import { AuthService } from '../../Features/auth/services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+
+  // Excluding authentication paths
   if (req.url.includes('/auth/')) {
     return next(req);
   }
@@ -10,6 +12,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = inject(AuthService).getToken();
 
   if (token) {
+    // make copy from token to can edit
     const cloned = req.clone({
       setHeaders: {
         token: token,
@@ -19,5 +22,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(cloned);
   }
 
+  // if there arent token
   return next(req);
+
 };
