@@ -16,45 +16,50 @@ import { AuthService } from '../../../../Features/auth/services/auth.service';
 })
 export class DashboardSliderComponent implements OnInit {
 
+  // service
   private readonly usersService = inject(UsersService);
-  private readonly platformId = inject(PLATFORM_ID);
 
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 
-
-
+  // signal variable
   emailValue = signal<string>('');
   firstNameValue = signal<string>('');
+
 
   constructor(private flowbiteService: FlowbiteService) { }
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.profileData();
-    };
+
+    this.profileData();
 
     this.flowbiteService.loadFlowbite(() => {
       initFlowbite();
     });
   }
 
+
+  // appear user data
   private applyUserData(res: any | null): void {
+    //  if it is null or undefined
     if (!res) {
       this.firstNameValue.set('');
       this.emailValue.set('');
       return;
     }
 
+    // search for data by safety way
     const user = res.user ?? res.payload?.user ?? res.payload ?? res.data ?? res;
 
     const firstName = user?.firstName ?? user?.FirstName ?? '';
     const email = user?.email ?? user?.Email ?? '';
 
+    // set data in signal variable
     this.firstNameValue.set(firstName);
     this.emailValue.set(email);
   }
 
+  // get user data
   profileData(): void {
     this.usersService.getUserProfile().subscribe({
       next: (data) => {

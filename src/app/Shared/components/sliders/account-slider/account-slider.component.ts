@@ -9,6 +9,7 @@ import { AuthService } from '../../../../Features/auth/services/auth.service';
   styleUrl: './account-slider.component.css',
 })
 export class AccountSliderComponent {
+
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 

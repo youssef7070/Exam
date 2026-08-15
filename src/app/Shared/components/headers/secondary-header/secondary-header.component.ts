@@ -8,10 +8,16 @@ import { Location } from '@angular/common';
   styleUrl: './secondary-header.component.css',
 })
 export class SecondaryHeaderComponent {
+
+  // if font put title it will put dashboard
   @Input() title: string = 'Dashboard';
+
+  // to go back
   private readonly location = inject(Location);
 
+  // the previous location
   goBack(): void {
     this.location.back();
   }
+
 }
